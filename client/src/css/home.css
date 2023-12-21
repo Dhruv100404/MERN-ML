@@ -42,6 +42,7 @@ p {
 .user-info {
     display: flex;
     align-items: center;
+    color: white;
 }
 
 .user-image {

@@ -22,13 +22,7 @@ app.use(cors({
 
 app.use(express.json());
 
-const corsOptions = {
-    origin: 'http://localhost:6005',
-    methods: 'GET,POST,PUT,DELETE',
-    credentials: true, // Enable credentials (cookies)
-};
 
-app.use(cors(corsOptions));
 
 // setup session
 app.use(session({
@@ -62,6 +56,7 @@ passport.use(
 
                     await user.save();
                 }
+                
 
                 return done(null, user)
             } catch (error) {
@@ -82,11 +77,29 @@ passport.deserializeUser((user, done) => {
 // initial google ouath login
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-app.get("/auth/google/callback", passport.authenticate("google", {
-    successRedirect: "http://localhost:3000/home",
-    failureRedirect: "http://localhost:3000"
-}))
+app.get('/auth/google/callback',
+    passport.authenticate('google', { scope: ['profile', 'email'] }),
+    (req, res) => {
+        if (req.user) {
+            const userData = {
+                id: req.user._id,
+                displayName: req.user.displayName,
+                email: req.user.email,
+                image: req.user.image
+                // Add other necessary user data
+            };
 
+            const userDataString = JSON.stringify(userData);
+
+            // Set a cookie named 'sakemaru' with user data
+            res.cookie('sakemaru', userDataString, { maxAge: 3600000 });
+
+            res.redirect('http://localhost:3000/home');
+        } else {
+            res.redirect('http://localhost:3000');
+        }
+    }
+);
 app.get("/login/sucess", async (req, res) => {
 
     if (req.user) {
@@ -96,12 +109,24 @@ app.get("/login/sucess", async (req, res) => {
     }
 })
 
-app.get("/logout", (req, res, next) => {
+// Existing code...
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true, // Enable credentials (cookies)
+};
+
+app.use(cors(corsOptions));
+
+app.get('/logout', cors(corsOptions), (req, res, next) => {
     req.logout(function (err) {
-        if (err) { return next(err) }
-        res.redirect("http://localhost:3000");
-    })
-})
+        if (err) { return next(err); }
+        res.redirect('http://localhost:3000');
+    });
+});
+
+// Existing code...
 
 app.listen(PORT, () => {
     console.log(`server start at port no ${PORT}`)
