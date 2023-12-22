@@ -13,11 +13,13 @@ const clientid = "105591079051-hdtr8v5sflk6chdh7102l23f8puvisti.apps.googleuserc
 const clientsecret = "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"
 
 
-app.use(cors({
-    origin: "http://localhost:3000",
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true
-}));
+app.use(
+    cors({
+        origin: "*", // Replace with your React app's URL
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        // Enable credentials (cookies, HTTP authentication)
+    })
+);
 
 
 app.use(express.json());
@@ -56,7 +58,7 @@ passport.use(
 
                     await user.save();
                 }
-                
+
 
                 return done(null, user)
             } catch (error) {
@@ -92,7 +94,7 @@ app.get('/auth/google/callback',
             const userDataString = JSON.stringify(userData);
 
             // Set a cookie named 'sakemaru' with user data
-            res.cookie('sakemaru', userDataString, { maxAge: 3600000 });
+            res.cookie('sakemaru', userDataString, { maxAge: 300000 });
 
             res.redirect('http://localhost:3000/home');
         } else {
@@ -100,6 +102,7 @@ app.get('/auth/google/callback',
         }
     }
 );
+
 app.get("/login/sucess", async (req, res) => {
 
     if (req.user) {
@@ -109,24 +112,16 @@ app.get("/login/sucess", async (req, res) => {
     }
 })
 
-// Existing code...
 
-const corsOptions = {
-    origin: 'http://localhost:3000',
-    methods: 'GET,POST,PUT,DELETE',
-    credentials: true, // Enable credentials (cookies)
-};
+app.get('/logout', (req, res, next) => {
 
-app.use(cors(corsOptions));
+        req.logout(function (err) {
+            if (err) { return next(err); }
+        });
 
-app.get('/logout', cors(corsOptions), (req, res, next) => {
-    req.logout(function (err) {
-        if (err) { return next(err); }
-        res.redirect('http://localhost:3000');
-    });
+    res.redirect('http://localhost:3000');
 });
 
-// Existing code...
 
 app.listen(PORT, () => {
     console.log(`server start at port no ${PORT}`)

@@ -13,7 +13,10 @@ const Home = () => {
         <h1 class="animate__animated animate__fadeIn">Document Summarization</h1>
         <div class="summarization-icon"></div>
         <p>Welcome to our document summarization platform. Summarize your documents effortlessly!</p>
-        <a class="login-button animate__animated animate__bounceInLeft" onClick={loginwithgoogle}>Sign In</a>
+        <button className="login-button animate_animated animate_bounceInLeft" onClick={loginwithgoogle}>
+            Sign In
+          </button>
+        
             </div>
         
       </div>

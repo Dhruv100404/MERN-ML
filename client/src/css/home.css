@@ -26,9 +26,6 @@ p {
     margin-bottom: 40px;
 }
 
-/* Assuming a basic structure for the navbar with user info on the right and a logout button on the left */
-
-/* Navbar container */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -117,5 +114,50 @@ button:hover {
 
     100% {
         transform: scale(1);
+    }
+}
+
+/* Add responsive design using media queries */
+@media screen and (max-width: 768px) {
+    
+
+    h1 {
+        font-size: 2.5em; /* Decrease heading size for smaller screens */
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 1.1em; /* Adjust paragraph font size */
+        margin-bottom: 20px;
+    }
+
+    .navbar {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+        padding: 10px 0;
+    }
+
+    .user-info {
+        margin-bottom: 10px;
+    }
+
+    .user-image {
+        width: 30px;
+        height: 30px;
+        margin-right: 5px;
+    }
+
+    .logout-button {
+        margin-top: 10px;
+        margin-left: 0;
+    }
+
+    .summarization-icon {
+        width: 100px;
+        height: 100px;
+        margin: 20px auto;
+    }
+
+    .login-button {
+        padding: 10px 20px;
     }
 }

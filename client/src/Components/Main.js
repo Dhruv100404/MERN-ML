@@ -5,20 +5,19 @@ import Cookies from 'js-cookie';
 const Main = () => {
     const [userName, setUserName] = useState('');
     const [userImage, setUserImage] = useState('');
-    
-    useEffect(() => 
-    {
+
+    useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const userDataFromCookie = Cookies.get('sakemaru');
                 console.log(userDataFromCookie)
-                
+
                 if (userDataFromCookie) {
                     const parsedUserData = JSON.parse(userDataFromCookie);
                     console.log(parsedUserData)
                     if (parsedUserData.displayName) {
                         setUserName(parsedUserData.displayName);
-                        
+
                     }
                     if (parsedUserData.image) {
                         setUserImage(parsedUserData.image);
@@ -31,12 +30,21 @@ const Main = () => {
 
         fetchUserData();
     }, []);
-
     const handleLogout = async () => {
+        var headers = new Headers();
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+
+    headers.append('Access-Control-Allow-Origin', 'http://localhost:3000/home');
+    headers.append('Access-Control-Allow-Credentials', 'true');
+
+    headers.append('GET', 'POST', 'OPTIONS');
+    
         try {
             const response = await fetch('http://localhost:6005/logout', {
                 method: 'GET',
-                credentials: 'include',
+                headers: headers
             });
 
             if (response.status === 200) {
